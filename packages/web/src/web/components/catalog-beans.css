@@ -1,0 +1,17 @@
+/* The beans stay behind the full collection, including as the cards scroll. */
+.catalog-beans { position: absolute; inset: 0; z-index: -1; pointer-events: none; }
+.catalog-beans-window {
+  position: sticky;
+  top: 0;
+  height: min(100%, 100svh);
+  background: center / cover no-repeat url('/videos/beans.webp');
+}
+.catalog-beans video { width: 100%; height: 100%; object-fit: cover; }
+.catalog-beans-window::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, var(--background), #14100d42 25%, #14100d75 73%, var(--background)),
+    linear-gradient(90deg, #14100db8 0%, #14100d75 27%, #14100d26 74%, #14100d55);
+}
+@media (prefers-reduced-motion: reduce) { .catalog-beans video { visibility: hidden; } }

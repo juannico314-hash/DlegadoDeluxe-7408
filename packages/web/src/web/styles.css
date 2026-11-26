@@ -1,0 +1,184 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@font-face {
+  font-family: "Fraunces";
+  src: url("/fonts/Fraunces.woff2") format("woff2");
+  font-weight: 100 900;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Outfit";
+  src: url("/fonts/Outfit.woff2") format("woff2");
+  font-weight: 100 900;
+  font-display: swap;
+}
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --radius-sm: 6px;
+  --radius-md: 14px;
+  --radius-lg: 28px;
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-espresso: #14100d;
+  --color-roast: #3b1f17;
+  --color-roast-2: #241712;
+  --color-gold: #e2c47e;
+  --color-gold-deep: #b8913f;
+  --color-olive: #5e6b2e;
+  --color-cream: #efe6d2;
+  --color-lavender: #b48cd8;
+  --font-display: "Fraunces", Georgia, serif;
+  --font-sans: "Outfit", "Helvetica Neue", Arial, sans-serif;
+}
+
+:root {
+  --background: #14100d;
+  --foreground: #efe6d2;
+  --card: #241712;
+  --primary: #e2c47e;
+  --primary-foreground: #14100d;
+  --secondary: #3b1f17;
+  --secondary-foreground: #efe6d2;
+  --muted: #241712;
+  --muted-foreground: #a8998a;
+  --accent: #e2c47e;
+  --accent-foreground: #14100d;
+  --destructive: #e06c4f;
+  --border: rgba(226, 196, 126, 0.18);
+  --input: rgba(226, 196, 126, 0.25);
+  --ring: #e2c47e;
+  color-scheme: dark;
+  --ease-pour: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@layer base {
+  * { @apply border-border outline-ring/50; }
+  html { scroll-behavior: smooth; overflow-x: clip; }
+  body {
+    @apply bg-background text-foreground font-sans antialiased;
+    overflow-x: clip;
+  }
+  ::selection { background: #e2c47e; color: #14100d; }
+}
+
+/* ---------- utilities ---------- */
+.label {
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: #e2c47e;
+}
+.grain::after {
+  content: "";
+  position: absolute; inset: 0;
+  pointer-events: none;
+  opacity: 0.07;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  mix-blend-mode: overlay;
+}
+.text-outline {
+  color: transparent;
+  -webkit-text-stroke: 1.5px #e2c47e;
+}
+.glow-gold { box-shadow: 0 0 60px rgba(226, 196, 126, 0.25); }
+
+/* reveal on scroll */
+.reveal { opacity: 0; transform: translateY(40px); transition: opacity 1s var(--ease-pour), transform 1s var(--ease-pour); }
+.reveal.in { opacity: 1; transform: none; }
+
+/* hero load */
+@keyframes rise { from { opacity: 0; transform: translateY(70%) skewY(4deg); } to { opacity: 1; transform: none; } }
+.rise { animation: rise 1.2s var(--ease-pour) both; }
+@keyframes fade-in { from { opacity: 0; } to { opacity: 1; } }
+.fade-in { animation: fade-in 1.6s ease both; }
+@keyframes zoom-out { from { transform: scale(1.15); } to { transform: scale(1); } }
+.zoom-out { animation: zoom-out 2.4s var(--ease-pour) both; }
+
+/* marquee */
+@keyframes marquee { to { transform: translateX(-50%); } }
+.marquee-track { display: flex; width: max-content; animation: marquee 28s linear infinite; }
+.marquee-track.reverse { animation-direction: reverse; }
+
+/* steam */
+@keyframes steam {
+  0% { transform: translateY(20px) scaleX(1); opacity: 0; }
+  20% { opacity: 0.55; }
+  100% { transform: translateY(-160px) scaleX(1.6); opacity: 0; }
+}
+.steam path { animation: steam 5s ease-in infinite; transform-origin: center bottom; }
+.steam path:nth-child(2) { animation-delay: 1.6s; }
+.steam path:nth-child(3) { animation-delay: 3.2s; }
+
+/* floating beans */
+@keyframes float { 0%, 100% { transform: translateY(0) rotate(var(--r, 0deg)); } 50% { transform: translateY(-22px) rotate(calc(var(--r, 0deg) + 14deg)); } }
+.bean { animation: float var(--d, 6s) ease-in-out infinite; }
+/* real 3D beans: drift + tumble */
+@keyframes tumble {
+  0%   { transform: translate3d(0, 0, 0) rotate(var(--r, 0deg)) rotateY(0deg); }
+  25%  { transform: translate3d(10px, -18px, 0) rotate(calc(var(--r, 0deg) + 25deg)) rotateY(35deg); }
+  50%  { transform: translate3d(-6px, -30px, 0) rotate(calc(var(--r, 0deg) + 50deg)) rotateY(0deg); }
+  75%  { transform: translate3d(-12px, -12px, 0) rotate(calc(var(--r, 0deg) + 25deg)) rotateY(-35deg); }
+  100% { transform: translate3d(0, 0, 0) rotate(var(--r, 0deg)) rotateY(0deg); }
+}
+.bean3d { animation: tumble var(--d, 9s) ease-in-out infinite; will-change: transform; }
+
+/* liquid button */
+.btn-pour { position: relative; overflow: hidden; isolation: isolate; transition: color .4s var(--ease-pour), transform .3s var(--ease-pour); }
+.btn-pour::before {
+  content: ""; position: absolute; inset: 0; z-index: -1;
+  background: #efe6d2;
+  border-radius: 40% 45% 0 0;
+  transform: translateY(105%);
+  transition: transform .6s var(--ease-pour), border-radius .6s var(--ease-pour);
+}
+.btn-pour:hover::before { transform: translateY(0); border-radius: 0; }
+.btn-pour:hover { transform: translateY(-2px); }
+
+/* product card */
+.pcard-img { transition: transform .8s var(--ease-pour), filter .8s; filter: drop-shadow(0 30px 40px rgba(0,0,0,.55)); }
+.pcard:hover .pcard-img { transform: translateY(-12px) scale(1.05) rotate(-1.5deg); }
+.pcard-glow { transition: opacity .8s; opacity: .55; }
+.pcard:hover .pcard-glow { opacity: 1; }
+
+/* legal prose (cream theme) */
+.legal { background: #efe6d2; color: #3b1f17; }
+.legal h2 { font-family: "Fraunces", serif; font-weight: 700; font-size: 1.6rem; margin: 2.5rem 0 .75rem; color: #3b1f17; }
+.legal h3 { font-weight: 600; font-size: 1.1rem; margin: 1.5rem 0 .5rem; }
+.legal p, .legal li { color: #4a362b; line-height: 1.75; }
+.legal ul { list-style: disc; padding-left: 1.4rem; margin: .5rem 0 1rem; }
+.legal a { color: #8a6a2b; text-decoration: underline; }
+.legal strong { color: #3b1f17; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
+  .reveal { opacity: 1; transform: none; }
+}
+
+/* drifting fog over the mountain video */
+@keyframes fog-drift { from { background-position: 0 100%, 0 100%; } to { background-position: 1200px 100%, -800px 100%; } }
+.fog {
+  background-image:
+    radial-gradient(ellipse 600px 120px at 30% 80%, rgba(239, 230, 210, .14), transparent 70%),
+    radial-gradient(ellipse 500px 100px at 70% 90%, rgba(239, 230, 210, .10), transparent 70%);
+  background-size: 1200px 100%, 800px 100%;
+  background-repeat: repeat-x;
+  animation: fog-drift 40s linear infinite;
+  mix-blend-mode: screen;
+}
